@@ -1,0 +1,1 @@
+[Fri Jan 19 16:48:54.526481 2024] [autoindex:error] [pid 48898] [client 127.0.0.1:48360] AH01276: Cannot serve directory /var/www/html/schedule/public/js/: No matching DirectoryIndex (index.html,index.cgi,index.pl,index.php,index.xhtml,index.htm) found, and server-generated directory index forbidden by Options directive, referer: http://schedule.bpkad.test/admin/kalender

@@ -32,6 +32,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapBidangRoutes();
         $this->mapPenggunaRoutes();
+        $this->mapJadwalRoutes();
     }
 
     public function mapBidangRoutes()
@@ -46,6 +47,13 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/admin/users.php'));
+    }
+
+    public function mapJadwalRoutes()
+    {
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/admin/jadwal.php'));
     }
 
     public function mapWebRoutes()

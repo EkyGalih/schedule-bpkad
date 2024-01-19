@@ -7,7 +7,7 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
                     Dashboard
                 </a>
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="{{ route('jadwal.index') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
                     Jadwal
                 </a>
