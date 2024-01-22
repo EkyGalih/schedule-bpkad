@@ -11,8 +11,6 @@
 
     #external-events {
       position: absolute;
-      left: 20px;
-      top: 20px;
       width: 150px;
       padding: 0 10px;
       border: 1px solid #ccc;
@@ -61,24 +59,23 @@
     </ol>
 
         <div id='external-events'>
-          <h4>Draggable Events</h4>
+          <h4>Kegiatan</h4>
+
+            @php
+                $tahun = date('Y');
+                $users_id = Auth::user()->id;
+                $bidang_id = Auth::user()->bidang_id;
+            @endphp
+        <div id="tahun" hidden>{{ $tahun }}</div>
+        <div id="users_id" hidden>{{ $users_id }}</div>
+        <div id="bidang_id" hidden>{{ $bidang_id }}</div>
 
           <div id='external-events-list'>
+            @foreach ($kegiatans as $kegiatan)
             <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-              <div class='fc-event-main'>My Event 1</div>
-            </div>
-            <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-              <div class='fc-event-main'>My Event 2</div>
-            </div>
-            <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-              <div class='fc-event-main'>My Event 3</div>
-            </div>
-            <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-              <div class='fc-event-main'>My Event 4</div>
-            </div>
-            <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-              <div class='fc-event-main'>My Event 5</div>
-            </div>
+                <div class='fc-event-main' id="kegiatan">{{ $kegiatan->kegiatan }}</div>
+              </div>
+            @endforeach
           </div>
 
           <p>
@@ -97,7 +94,11 @@
    <script src="{{ asset('js/index.global.js') }}"></script>
    <script>
 
-    document.addEventListener('DOMContentLoaded', function() {
+       var tahun = $('#tahun').text();
+       var bidang_id = $('#bidang_id').text();
+       var users_id = $('#users_id').text();
+
+       document.addEventListener('DOMContentLoaded', function() {
 
       /* initialize the external events
       -----------------------------------------------------------------*/
@@ -112,38 +113,77 @@
         }
       });
 
-      //// the individual way to do it
-      // var containerEl = document.getElementById('external-events-list');
-      // var eventEls = Array.prototype.slice.call(
-      //   containerEl.querySelectorAll('.fc-event')
-      // );
-      // eventEls.forEach(function(eventEl) {
-      //   new FullCalendar.Draggable(eventEl, {
-      //     eventData: {
-      //       title: eventEl.innerText.trim(),
-      //     }
-      //   });
-      // });
-
-      /* initialize the calendar
+            /* initialize the calendar
       -----------------------------------------------------------------*/
+
+        var cal;
+
+        $.ajax({
+        type: "GET",
+        async: false,
+        data: {cal:cal},
+        url: '{{ url('jadwals') }}',
+        success: function(data) {
+            cal = data;
+        }
+        });
 
       var calendarEl = document.getElementById('calendar');
       var calendar = new FullCalendar.Calendar(calendarEl, {
-        headerToolbar: {
+          headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
+        navLinks: true,
+        selectable: true,
+        selectMirror: true,
         editable: true,
         droppable: true, // this allows things to be dropped onto the calendar
         drop: function(arg) {
-          // is the "remove after drop" checkbox checked?
-          if (document.getElementById('drop-remove').checked) {
-            // if so, remove the element from the "Draggable Events" list
-            arg.draggedEl.parentNode.removeChild(arg.draggedEl);
-          }
-        }
+            var keg_id;
+            var tahun_id;
+            var keg = arg.draggedEl.innerText;
+            var allDay = arg.allDay;
+            if (allDay == true) {
+                var waktu_mulai = arg.dateStr;
+                var waktu_berakhir = arg.dateStr;
+            }
+            $.ajax({
+                type: 'GET',
+                async: false,
+                data: {keg_id:keg_id},
+                url: '{{ url('kegiatan') }}/'+keg,
+                success: function(data){
+                    keg_id = data;
+                }
+            });
+            $.ajax({
+                type: 'GET',
+                async: false,
+                data: {tahun_id:tahun_id},
+                url: '{{ url('tahun') }}/'+tahun,
+                success: function(data){
+                    tahun_id = data;
+                }
+            });
+            if (confirm('anda yakin?')) {
+                $.ajax({
+                    type: "post",
+                    async: true,
+                    data: {keg_id:keg_id, tahun_id: tahun_id, waktu_mulai: waktu_mulai, waktu_berakhir:waktu_berakhir, bidang_id: bidang_id, users_id: users_id, keterangan: keg},
+                    url: '{{ url('jadwal') }}',
+                    success: function(data){
+                        windows.alert("Jadwal berhasil dibuat!");
+                    }, error: function (error) {
+                        console.log(error);
+                    }
+                });
+            } else {
+                window.alert("Jadwal gagal dibuat!");
+            }
+        },
+        events: cal,
       });
       calendar.render();
 

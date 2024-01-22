@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kegiatan;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -12,7 +13,9 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        return view('Admin.Jadwal.jadwal');
+        $kegiatans = Kegiatan::orderBy('kegiatan', 'ASC')->get();
+        
+        return view('Admin.Jadwal.jadwal', compact('kegiatans'));
     }
 
     /**
