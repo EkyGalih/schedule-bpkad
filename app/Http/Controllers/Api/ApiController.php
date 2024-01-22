@@ -38,7 +38,26 @@ class ApiController extends Controller
 
     public function getSchedule()
     {
-        $jadwal = Jadwal::select('keterangan as title','waktu_mulai as start', 'waktu_berakhir as end')->get();
+        $jadwal = Jadwal::select('id', 'keterangan as title','waktu_mulai as start', 'waktu_berakhir as end')->get();
         return $jadwal;
+    }
+
+    public function ubahJadwal(Request $request, $id)
+    {
+        $jadwal = Jadwal::findOrFail($id);
+
+        if ($request->allDay == true) {
+            $jadwal->update([
+                'waktu_mulai' => $request->date,
+                'waktu_berakhir' => $request->date
+            ]);
+        } else {
+            $jadwal->update([
+                'waktu_mulai' => $request->waktu_mulai,
+                'waktu_berakhir' => $request->waktu_berakhir
+            ]);
+        }
+
+        return;
     }
 }

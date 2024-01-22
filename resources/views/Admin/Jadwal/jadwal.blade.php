@@ -179,8 +179,21 @@
                         console.log(error);
                     }
                 });
+            }
+        },
+        eventDrop: function(info)
+        {
+            if (!confirm("Apa anda yakin mengubah jadwal?")) {
+                info.revert();
             } else {
-                window.alert("Jadwal gagal dibuat!");
+                $.ajax({
+                    type: 'PUT',
+                    url: '{{ url('updateJadwals') }}/'+info.event.id,
+                    data: {allDay: info.event.allDay, date: info.event.startStr, waktu_mulai : info.event.start, waktu_berakhir:info.event.end, keterangan: info.event.title},
+                    success: function (data) {
+                        console.log('success');
+                    }
+                });
             }
         },
         events: cal,

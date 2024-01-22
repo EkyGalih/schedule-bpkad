@@ -23,3 +23,4 @@ Route::get('/kegiatan/{id}', [ApiController::class, 'kegiatan'])->name('kegiatan
 Route::get('/tahun/{id}', [ApiController::class, 'tahun'])->name('tahun.get');
 Route::post('/jadwal', [ApiController::class, 'schedule'])->name('jadwal.store');
 Route::get('/jadwals', [ApiController::class, 'getSchedule'])->name('jadwal.index');
+Route::put('/updateJadwals/{id}', [ApiController::class, 'ubahJadwal'])->name('jadwal.update');
