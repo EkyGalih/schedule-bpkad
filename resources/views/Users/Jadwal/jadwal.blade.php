@@ -1,5 +1,5 @@
-@extends('Admin.index')
-@section('title', 'Admin | Jadwal')
+@extends('Users.index')
+@section('title', 'Users | Jadwal')
 @section('additional-css')
     <style>
         body {
@@ -85,11 +85,13 @@
 
         <p>
             <label for='drop-remove'>Keterangan Warna</label>
-            <ol>
-                @foreach ($bidangs as $bidang)
-                <li class="customStyle" style="background-color: {{ $bidang->warna_bidang }}; color: {{ $bidang->warna_text }}">{{ $bidang->nama_bidang }}</li>
-                @endforeach
-            </ol>
+        <ol>
+            @foreach ($bidangs as $bidang)
+                <li class="customStyle"
+                    style="background-color: {{ $bidang->warna_bidang }}; color: {{ $bidang->warna_text }}">
+                    {{ $bidang->nama_bidang }}</li>
+            @endforeach
+        </ol>
         </p>
     </div>
 
@@ -298,20 +300,32 @@
                     }
                 },
                 eventClick: function(arg) {
-                    if (confirm("Apakah anda yakin hapus kegiatan?")) {
-                        $.ajax({
-                            type: 'GET',
-                            url: '{{ url('deleteJadwal') }}/' + arg.event.id,
-                            success: function(data) {
-                                $('#msg').removeAttr('hidden');
-                                $('#msg').text('Kegiatan berhasil dihapus!');
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1500);
-                            }
-                        });
-                        arg.event.remove();
-                    }
+                    var bidang;
+                    $.ajax({
+                        type: 'GET',
+                        async: false,
+                        data: {
+                            bidang: bidang
+                        },
+                        url: '{{ url('cekBidang') }}/' + arg.event.id,
+                        success: function(data) {
+                            console.log(data);
+                        }
+                    });
+                    // if (confirm("Apakah anda yakin hapus kegiatan?")) {
+                    //     $.ajax({
+                    //         type: 'GET',
+                    //         url: '{{ url('deleteJadwal') }}/' + arg.event.id,
+                    //         success: function(data) {
+                    //             $('#msg').removeAttr('hidden');
+                    //             $('#msg').text('Kegiatan berhasil dihapus!');
+                    //             setTimeout(() => {
+                    //                 location.reload();
+                    //             }, 1500);
+                    //         }
+                    //     });
+                    //     arg.event.remove();
+                    // }
                 },
                 eventResize: function(arg) {
                     if (!confirm("Apa anda yakin mengubah jadwal?")) {

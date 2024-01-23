@@ -45,6 +45,11 @@
 <body>
     <div class="login-container">
         <h3 class="text-center">Login</h3>
+        @if (Session::has('failed'))
+            <div class="alert alert-danger" role="alert">
+                {{ Session::get('failed') }}
+            </div>
+        @endif
         <form method="POST" action="{{ route('auth.login') }}">
             @csrf
             <div class="form-group">

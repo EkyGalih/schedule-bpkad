@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Users\BerandaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,4 +22,8 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.index');
+});
+
+Route::group(['prefix' => 'users', 'middleware' => ['auth', 'users']], function () {
+    Route::get('/', [BerandaController::class, 'index'])->name('users.index');
 });
