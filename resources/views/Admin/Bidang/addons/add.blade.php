@@ -12,6 +12,14 @@
                         <input class="form-control" id="inputBidang" name="nama_bidang" type="text" />
                         <label for="inputBidang">Nama Bidang</label>
                     </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="inputWarnaBidang" name="warna_bidang" type="color" />
+                        <label for="inputWarnaBidang">Warna Bidang</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="inputTextWarna" name="warna_text" type="color" />
+                        <label for="inputTextWarna">Warna Text</label>
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times"></i>

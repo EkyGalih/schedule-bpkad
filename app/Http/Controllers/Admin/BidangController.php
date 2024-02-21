@@ -24,7 +24,9 @@ class BidangController extends Controller
     public function store(Request $request)
     {
         Bidang::create([
-            'nama_bidang' => $request->nama_bidang
+            'nama_bidang' => $request->nama_bidang,
+            'warna_bidang' => $request->warna_bidang,
+            'warna_text' => $request->warna_text
         ]);
 
         return redirect()->route('bidang.index')->with(['success' => 'Bidang berhasil ditambah!']);
@@ -37,7 +39,9 @@ class BidangController extends Controller
     {
         $bidang = Bidang::findOrFail($id);
         $bidang->update([
-            'nama_bidang' => $request->nama_bidang
+            'nama_bidang' => $request->nama_bidang,
+            'warna_bidang' => $request->warna_bidang,
+            'warna_text' => $request->warna_text
         ]);
 
         return redirect()->route('bidang.index')->with(['success' => 'Nama Bidang berhasil diubah']);

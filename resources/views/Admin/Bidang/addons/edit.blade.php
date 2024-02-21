@@ -15,6 +15,14 @@
                             value="{{ $bidang->nama_bidang }}" />
                         <label for="inputBidang">Nama Bidang</label>
                     </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="inputWarnaBidang" name="warna_bidang" type="color" value="{{ $bidang->warna_bidang }}" />
+                        <label for="inputWarnaBidang">Warna Bidang</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="inputTextWarna" name="warna_text" type="color" value="{{ $bidang->warna_text }}" />
+                        <label for="inputTextWarna">Warna Text</label>
+                    </div>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times"></i>
                         Batal</button>
                     <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Simpan</button>

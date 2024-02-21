@@ -28,6 +28,8 @@
                         <td></td>
                         <th>#</th>
                         <th>Nama Bidang</th>
+                        <th>Warna Bidang</th>
+                        <th>Warna Text</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -36,6 +38,12 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $bidang->nama_bidang }}</td>
+                            <td>
+                                <a style="background-color: {{ $bidang->warna_bidang }}; color: {{ $bidang->warna_text }}; padding: 5px;">{{ $bidang->warna_bidang }}</a>
+                            </td>
+                            <td>
+                                <a style="background-color: {{ $bidang->warna_text }}; color: {{ $bidang->warna_bidang }}; padding: 5px;">{{ $bidang->warna_text }}</a>
+                            </td>
                             <td>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
