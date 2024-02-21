@@ -205,7 +205,7 @@
                                 $('#msg').text('Kegiatan berhasil dibuat!');
                                 setTimeout(() => {
                                     location.reload();
-                                }, 1500);
+                                }, 1);
                             },
                             error: function(error) {
                                 console.log(error);
@@ -309,23 +309,31 @@
                         },
                         url: '{{ url('cekBidang') }}/' + arg.event.id,
                         success: function(data) {
-                            console.log(data);
+                            bidang = data;
                         }
                     });
-                    // if (confirm("Apakah anda yakin hapus kegiatan?")) {
-                    //     $.ajax({
-                    //         type: 'GET',
-                    //         url: '{{ url('deleteJadwal') }}/' + arg.event.id,
-                    //         success: function(data) {
-                    //             $('#msg').removeAttr('hidden');
-                    //             $('#msg').text('Kegiatan berhasil dihapus!');
-                    //             setTimeout(() => {
-                    //                 location.reload();
-                    //             }, 1500);
-                    //         }
-                    //     });
-                    //     arg.event.remove();
-                    // }
+                    if (bidang == bidang_id) {
+                        if (confirm("Apakah anda yakin hapus kegiatan?")) {
+                            $.ajax({
+                                type: 'GET',
+                                url: '{{ url('deleteJadwal') }}/' + arg.event.id,
+                                success: function(data) {
+                                    $('#msg').removeAttr('hidden');
+                                    $('#msg').text('Kegiatan berhasil dihapus!');
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 1500);
+                                }
+                            });
+                            arg.event.remove();
+                        }
+                    } else {
+                        $('#msg_error').removeAttr('hidden');
+                        $('#msg_error').text('Maaf, ini bukan kegiatan anda!');
+                        setTimeout(() => {
+                            $('#msg_error').hide('slow');
+                        }, 1500);
+                    }
                 },
                 eventResize: function(arg) {
                     if (!confirm("Apa anda yakin mengubah jadwal?")) {

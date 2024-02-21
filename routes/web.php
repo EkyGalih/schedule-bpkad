@@ -25,5 +25,5 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 });
 
 Route::group(['prefix' => 'users', 'middleware' => ['auth', 'users']], function () {
-    Route::get('/', [BerandaController::class, 'index'])->name('users.index');
+    Route::get('/', [BerandaController::class, 'index'])->name('users.beranda');
 });

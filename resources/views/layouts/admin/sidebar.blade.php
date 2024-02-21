@@ -7,11 +7,15 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
                     Dashboard
                 </a>
-                <a class="nav-link" href="{{ route('jadwal.index') }}">
+                <a class="nav-link" href="{{ route('kalender.index') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
                     Jadwal
                 </a>
                 <div class="sb-sidenav-menu-heading">Menu</div>
+                <a class="nav-link" href="{{ route('kegiatan.index') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-list-check"></i></div>
+                    Kegiatan
+                </a>
                 <a class="nav-link" href="{{ route('users.index') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                     Pengguna
