@@ -31,4 +31,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Bidang::class);
     }
+
+    public function jadwal()
+    {
+        return $this->hasMany(Jadwal::class);
+    }
 }

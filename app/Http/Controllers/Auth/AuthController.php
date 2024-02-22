@@ -30,7 +30,7 @@ class AuthController extends Controller
             if ($user->rule == 'admin') {
                 return redirect()->route('admin.index');
             } elseif ($user->rule == 'users') {
-                return redirect()->route('users.index');
+                return redirect()->route('users.beranda');
             }
         } else {
             return redirect()->back()->with(['failed' => 'Login gagal, pastikan username dan password anda benar']);

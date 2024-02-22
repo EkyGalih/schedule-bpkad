@@ -27,6 +27,16 @@ class Jadwal extends Model
         return $this->belongsTo(Kegiatan::class);
     }
 
+    public function bidang()
+    {
+        return $this->belongsTo(Bidang::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function tahun()
     {
         return $this->belongsTo(Tahun::class);

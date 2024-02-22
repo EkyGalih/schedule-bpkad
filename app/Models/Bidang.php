@@ -26,4 +26,9 @@ class Bidang extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    public function Jadwal()
+    {
+        return $this->hasMany(Jadwal::class);
+    }
 }

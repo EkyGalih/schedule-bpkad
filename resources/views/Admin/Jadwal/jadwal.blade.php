@@ -236,7 +236,7 @@
                     var tahun_id;
                     var waktu_mulai = arg.startStr;
                     var waktu_berakhir = arg.endStr;
-                    let keg = prompt("Masukkan Jenis Kegiatan");
+                    let keg = prompt("Masukkan Jenis Kegiatan anda");
 
                     if (keg != "") {
                         $.ajax({
