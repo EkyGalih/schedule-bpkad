@@ -272,7 +272,7 @@
                                     success: function(data) {
                                         Toast.fire({
                                             icon: "success",
-                                            title: "Jadwal dipindahkan!"
+                                            title: "Jadwal berhasil dipindahkan!"
                                         });
                                     }
                                 });

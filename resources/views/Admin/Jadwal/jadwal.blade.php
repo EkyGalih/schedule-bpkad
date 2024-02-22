@@ -85,11 +85,13 @@
 
         <p>
             <label for='drop-remove'>Keterangan Warna</label>
-            <ol>
-                @foreach ($bidangs as $bidang)
-                <li class="customStyle" style="background-color: {{ $bidang->warna_bidang }}; color: {{ $bidang->warna_text }}">{{ $bidang->nama_bidang }}</li>
-                @endforeach
-            </ol>
+        <ol>
+            @foreach ($bidangs as $bidang)
+                <li class="customStyle"
+                    style="background-color: {{ $bidang->warna_bidang }}; color: {{ $bidang->warna_text }}">
+                    {{ $bidang->nama_bidang }}</li>
+            @endforeach
+        </ol>
         </p>
     </div>
 
@@ -110,6 +112,17 @@
         var users_id = $('#users_id').text();
         var keg_id;
         var tahun_id;
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "center",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', function() {
 
@@ -184,85 +197,122 @@
                             tahun_id = data;
                         }
                     });
-                    if (confirm('anda yakin?')) {
-                        $.ajax({
-                            type: "post",
-                            async: true,
-                            data: {
-                                keg_id: keg_id,
-                                tahun_id: tahun_id,
-                                waktu_mulai: waktu_mulai,
-                                waktu_berakhir: waktu_berakhir,
-                                bidang_id: bidang_id,
-                                users_id: users_id,
-                                keterangan: keg
-                            },
-                            url: '{{ url('jadwal') }}',
-                            success: function(data) {
-                                $('#msg').removeAttr('hidden');
-                                $('#msg').text('Kegiatan berhasil dibuat!');
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1500);
-                            },
-                            error: function(error) {
-                                console.log(error);
-                            }
-                        });
-                    }
+                    Swal.fire({
+                        title: "Apakah anda yakin ingin membuat jadwal di sini?",
+                        showDenyButton: true,
+                        confirmButtonText: "Ya",
+                        denyButtonText: "Tidak"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "post",
+                                async: true,
+                                data: {
+                                    keg_id: keg_id,
+                                    tahun_id: tahun_id,
+                                    waktu_mulai: waktu_mulai,
+                                    waktu_berakhir: waktu_berakhir,
+                                    bidang_id: bidang_id,
+                                    users_id: users_id,
+                                    keterangan: keg
+                                },
+                                url: '{{ url('jadwal') }}',
+                                success: function(data) {
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Kegiatan ditambahkan!"
+                                    });
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 10);
+                                },
+                                error: function(error) {
+                                    console.log(error);
+                                }
+                            });
+                        } else if (result.isDenied) {
+                            Toast.fire({
+                                icon: "error",
+                                title: "Tambah kegiatan dibatalkan"
+                            });
+                            setTimeout(() => {
+                                location.reload();
+                            }, 10);
+                        }
+                    });
                 },
                 eventDrop: function(info) {
-                    if (!confirm("Apa anda yakin mengubah jadwal?")) {
-                        info.revert();
-                    } else {
-                        $.ajax({
-                            type: 'PUT',
-                            url: '{{ url('updateJadwals') }}/' + info.event.id,
-                            data: {
-                                allDay: info.event.allDay,
-                                date: info.event.startStr,
-                                waktu_mulai: info.event.start,
-                                waktu_berakhir: info.event.end,
-                                keterangan: info.event.title
-                            },
-                            success: function(data) {
-                                console.log('success');
-                            }
-                        });
-                    }
+                    Swal.fire({
+                        title: "Anda yakin ingin memindahkan jadwal disini?",
+                        showDenyButton: true,
+                        confirmButtonText: "Ya",
+                        denyButtonText: "Tidak"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: 'PUT',
+                                url: '{{ url('updateJadwals') }}/' + info.event.id,
+                                data: {
+                                    allDay: info.event.allDay,
+                                    date: info.event.startStr,
+                                    waktu_mulai: info.event.start,
+                                    waktu_berakhir: info.event.end,
+                                    keterangan: info.event.title
+                                },
+                                success: function(data) {
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Jadwal berhasil dipindahkan!"
+                                    });
+                                }
+                            });
+                        } else if (result.isDenied) {
+                            info.revert();
+                        }
+                    });
                 },
                 select: function(arg) {
                     var keg_id;
                     var tahun_id;
                     var waktu_mulai = arg.startStr;
                     var waktu_berakhir = arg.endStr;
-                    let keg = prompt("Masukkan Jenis Kegiatan anda");
 
-                    if (keg != "") {
-                        $.ajax({
-                            type: 'GET',
-                            async: false,
-                            data: {
-                                keg_id: keg_id
-                            },
-                            url: '{{ url('kegiatan') }}/' + keg,
-                            success: function(data) {
-                                keg_id = data;
-                            }
-                        });
-                        $.ajax({
-                            type: 'GET',
-                            async: false,
-                            data: {
-                                tahun_id: tahun_id
-                            },
-                            url: '{{ url('tahun') }}/' + tahun,
-                            success: function(data) {
-                                tahun_id = data;
-                            }
-                        });
-                        if (keg_id != 'false') {
-                            if (confirm('anda yakin?')) {
+                    Swal.fire({
+                        title: "Tambah Kegiatan",
+                        input: "text",
+                        inputLabel: "Masukkan Jenis Kegiatans",
+                        showCancelButton: true,
+                        confirmButtonText: "Simpan"
+                    }).then((result) => {
+                        if (result.value == "" || !result.isConfirmed) {
+                            Toast.fire({
+                                icon: "warning",
+                                title: "Harap mengisi jenis kegiatan"
+                            });
+                        } else {
+                            $.ajax({
+                                type: 'GET',
+                                async: false,
+                                data: {
+                                    keg_id: keg_id
+                                },
+                                url: '{{ url('kegiatan') }}/' + result.value,
+                                success: function(data) {
+                                    keg_id = data;
+                                }
+                            });
+                            $.ajax({
+                                type: 'GET',
+                                async: false,
+                                data: {
+                                    tahun_id: tahun_id
+                                },
+                                url: '{{ url('tahun') }}/' + tahun,
+                                success: function(data) {
+                                    tahun_id = data;
+                                }
+                            });
+                            if (keg_id != 'false') {
                                 $.ajax({
                                     type: "post",
                                     async: true,
@@ -273,12 +323,14 @@
                                         waktu_berakhir: waktu_berakhir,
                                         bidang_id: bidang_id,
                                         users_id: users_id,
-                                        keterangan: keg
+                                        keterangan: result.value
                                     },
                                     url: '{{ url('jadwal') }}',
                                     success: function(data) {
-                                        $('#msg').removeAttr('hidden');
-                                        $('#msg').text('Kegiatan berhasil dibuat!');
+                                        Toast.fire({
+                                            icon: "success",
+                                            title: "Kegiatan anda berhasil ditambahkan"
+                                        });
                                         setTimeout(() => {
                                             location.reload();
                                         }, 1500);
@@ -287,58 +339,71 @@
                                         console.log(error);
                                     }
                                 });
+                            } else {
+                                Toast.fire({
+                                    icon: 'warning',
+                                    title: "Kegiatan tidak ditemukan di database!"
+                                });
                             }
-                        } else {
-                            $('#msg_error').removeAttr('hidden');
-                            $('#msg_error').text('jenis kegiatan tidak ditemukan!');
                         }
-                    } else {
-                        $('#msg_error').removeAttr('hidden');
-                        $('#msg_error').text('silahkan masukkan kegiatan!');
-                    }
+                    });
                 },
                 eventClick: function(arg) {
-                    if (confirm("Apakah anda yakin hapus kegiatan?")) {
-                        $.ajax({
-                            type: 'GET',
-                            url: '{{ url('deleteJadwal') }}/' + arg.event.id,
-                            success: function(data) {
-                                $('#msg').removeAttr('hidden');
-                                $('#msg').text('Kegiatan berhasil dihapus!');
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1500);
-                            }
-                        });
-                        arg.event.remove();
-                    }
+                    Swal.fire({
+                        title: "Anda yakin ingin menghapus kegiatan ini?",
+                        showCancelButton: true,
+                        confirmButtonText: "Ya",
+                        cancelButtonText: `Tidak`
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: 'GET',
+                                url: '{{ url('deleteJadwal') }}/' + arg.event.id,
+                                success: function(data) {
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "kegiatan dihapus"
+                                    });
+                                    arg.event.remove();
+                                }
+                            });
+                        }
+                    });
                 },
                 eventResize: function(arg) {
-                    if (!confirm("Apa anda yakin mengubah jadwal?")) {
-                        arg.revert();
-                    } else {
-                        $.ajax({
-                            type: 'PUT',
-                            url: '{{ url('ubahJadwalResize') }}/' + arg.event.id,
-                            data: {
-                                allDay: arg.event.allDay,
-                                date: arg.event.startStr,
-                                waktu_mulai: arg.event.startStr,
-                                waktu_berakhir: arg.event.endStr,
-                                keterangan: arg.event.title
-                            },
-                            success: function(data) {
-                                $('#msg').removeAttr('hidden');
-                                $('#msg').text('Kegiatan berhasil diubah!');
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1500);
-                            },
-                            error: function(error) {
-                                console.log(error);
-                            }
-                        });
-                    }
+                    Swal.fire({
+                        title: "Anda Yakin ingin merubah jadwal?",
+                        showDenyButton: true,
+                        showCancelButton: false,
+                        confirmButtonText: "Ya",
+                        denyButtonText: `Tidak`
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: 'PUT',
+                                url: '{{ url('ubahJadwalResize') }}/' + arg.event.id,
+                                data: {
+                                    allDay: arg.event.allDay,
+                                    date: arg.event.startStr,
+                                    waktu_mulai: arg.event.startStr,
+                                    waktu_berakhir: arg.event.endStr,
+                                    keterangan: arg.event.title
+                                },
+                                success: function(data) {
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Jadwal berhasil diubah"
+                                    });
+                                },
+                                error: function(error) {
+                                    console.log(error);
+                                }
+                            });
+                        } else if (result.isDenied) {
+                            arg.revert();
+                        }
+                    });
                 },
                 events: cal,
             });
