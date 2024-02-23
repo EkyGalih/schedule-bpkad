@@ -95,13 +95,6 @@
         </p>
     </div>
 
-
-    <div id='calendar-wrap'>
-        <div class="alert alert-success" id="msg" hidden></div>
-        <div class="alert alert-danger" id="msg_error" hidden></div>
-        <div id='calendar'></div>
-    </div>
-
 @endsection
 @section('additional-js')
     <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -162,6 +155,17 @@
                     left: 'prev,next today',
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                eventTimeFormat: {
+                    hour: '2-digit', //2-digit, numeric
+                    minute: '2-digit', //2-digit, numeric
+                    meridiem: false, //lowercase, short, narrow, false (display of AM/PM)
+                    hour12: false //true, false
+                },
+                slotLabelFormat: {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: false
                 },
                 navLinks: true,
                 selectable: true,

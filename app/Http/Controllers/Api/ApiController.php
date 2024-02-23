@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Bidang;
 use App\Models\Jadwal;
 use App\Models\Kegiatan;
+use App\Models\Pegawai;
 use App\Models\Tahun;
 use App\Models\User;
 use Illuminate\Console\Scheduling\Schedule;
@@ -106,5 +107,15 @@ class ApiController extends Controller
         ->where('schedule.id', '=', $id)
         ->first();
         return $data->bidang_id;
+    }
+
+    public function searchPegawai($value)
+    {
+        $data = Pegawai::where('name', 'like', '%'.$value.'%')
+        ->orWhere('nip', 'like', '%'.$value.'%')
+        ->select('id' ,'nip', 'name')
+        ->get();
+
+        return $data;
     }
 }

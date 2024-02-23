@@ -1,5 +1,6 @@
 @extends('Admin.index')
 @section('title', 'Admin | Bidang')
+@section('bidang', 'active')
 @section('content')
     <h1 class="mt-4">Bidang</h1>
     <ol class="breadcrumb mb-4">

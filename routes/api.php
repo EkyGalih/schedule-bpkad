@@ -27,3 +27,4 @@ Route::put('/updateJadwals/{id}', [ApiController::class, 'ubahJadwal'])->name('j
 Route::put('/ubahJadwalResize/{id}', [ApiController::class, 'ubahJadwalResize'])->name('jadwal.updateResize');
 Route::get('/deleteJadwal/{id}', [ApiController::class, 'deleteJadwal'])->name('jadwal.delete');
 Route::get('/cekBidang/{id}', [ApiController::class, 'cekBidang'])->name('jadwal.cekBidang');
+Route::get('/searchPegawai/{value}', [ApiController::class, 'searchPegawai'])->name('pegawai');
